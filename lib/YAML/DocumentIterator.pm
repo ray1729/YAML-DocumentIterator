@@ -9,6 +9,10 @@ use Carp 'croak';
 use IO::Handle;
 use IO::File;
 use Iterator;
+use Const::Fast;
+
+const my $DOC_START_RX => qr/^---/;
+const my $DOC_END_RX   => qr/^\.\.\./;
 
 sub new {
     my ( $class, $in ) = @_;
@@ -29,16 +33,12 @@ sub new {
 
     return Iterator->new(
         sub {
-            while ( defined $line and $line ne "---\n" ) {
+            while ( defined $line and $line !~ $DOC_START_RX ) {
                 $line = $ifh->getline;
             }
             Iterator::is_done() unless defined $line;
             my $record = $line;
-            while ( defined( $line = $ifh->getline ) and $line ne "---\n" ) {
-                if ( $line eq "...\n" ) {
-                    $line = $ifh->getline;
-                    last;
-                }
+            while ( defined( $line = $ifh->getline ) and $line !~ $DOC_START_RX and $line !~ $DOC_END_RX ) {
                 $record .= $line;
             }
             return YAML::Syck::Load( $record );
@@ -71,6 +71,10 @@ read and parse a YAML file one record at a time. This is sometimes
 preferable to the behaviour of C<YAML::LoadFile>,
 C<YAML::Syck::LoadFile>, and C<YAML::XS::LoadFile> which read the
 entire file into memory before parsing.
+
+This module uses the (optional) document start marker C<---> to detect
+record boundaries and will not behave as expected if these markers
+are not present in your input file.
 
 =head1 METHODS
 

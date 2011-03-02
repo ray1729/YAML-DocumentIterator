@@ -15,6 +15,10 @@ DESCRIPTION
     "YAML::XS::LoadFile" which read the entire file into memory before
     parsing.
 
+    This module uses the (optional) document start marker "---" to detect
+    record boundaries and will not behave as expected if these markers are
+    not present in your input file.
+
 METHODS
     new(*$file*)
         Constructor. *$file* can be either an open IO::Handle or the name of

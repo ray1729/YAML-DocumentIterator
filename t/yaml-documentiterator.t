@@ -36,6 +36,8 @@ sub test_it {
     is_deeply $it->value(), { c => 3, d => 4 }, 'read second vaule';
     ok $it->isnt_exhausted, "iterator isn't exhausted";
     is_deeply $it->value(), { e => [ 5, 6 ]  }, 'read third value';
+    ok $it->isnt_exhausted, "iterator isn't exhausted";
+    is $it->value(), "Root block scalar\n", 'read fourth value';
     ok $it->is_exhausted, 'iterator is exhausted';
 }
 
@@ -44,9 +46,9 @@ __DATA__
 ---
 a: 1
 b: 2
-...
-# comment
+... comment
 # commenty comment
+# comment
 ---
 c: 3
 d: 4
@@ -54,3 +56,6 @@ d: 4
 e:
   - 5
   - 6
+--- !!str >
+  Root block
+  scalar
