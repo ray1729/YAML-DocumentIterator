@@ -1,0 +1,32 @@
+NAME
+    YAML::DocumentIterator
+
+SYNOPSIS
+      my $data = YAML::DocumentIterator->new( 'data.yaml' );
+      while ( $data->isnt_exhausted ) {
+          my $datum = $data->value;
+          # ...do something with $datum
+      }
+
+DESCRIPTION
+    This module provides a small wrapper around "YAML::Syck::Load" to read
+    and parse a YAML file one record at a time. This is sometimes preferable
+    to the behaviour of "YAML::LoadFile", "YAML::Syck::LoadFile", and
+    "YAML::XS::LoadFile" which read the entire file into memory before
+    parsing.
+
+METHODS
+    new(*$file*)
+        Constructor. *$file* can be either an open IO::Handle or the name of
+        a file to be opened for reading. Returns an Iterator object.
+
+SEE ALSO
+    YAML::Syck, Iterator.
+
+AUTHOR
+    Ray Miller <ray@1729.org.uk>.
+
+COPYRIGHT
+    This library is free software. You can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
